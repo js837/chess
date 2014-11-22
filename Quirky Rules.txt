@@ -1,0 +1,29 @@
+---CASTLING---
+The king and the chosen rook are on the player's first rank.[3]
+Neither the king nor the chosen rook have previously moved.
+There are no pieces between the king and the chosen rook.
+The king is not currently in check.
+The king does not pass through a square that is attacked by an enemy piece.[4]
+The king does not end up in check. (True of any legal move.)
+
+
+-- EN PASSANT --
+the capturing pawn must be on its fifth rank;
+the captured pawn must be on an adjacent file and must have just moved two squares in a single move (i.e. a double-step move);
+the capture can only be made on the move immediately after the opposing pawn makes the double-step move; otherwise the right to capture it en passant is lost.
+
+--PROMOTION--
+Promotion is a chess rule that a pawn that reaches its eighth rank is immediately changed into the player's choice of a queen, knight, rook, or bishop of the same color.[1] The new piece replaces the pawn on the same square, as part of the same move. 
+
+
+
+--CHECK--
+A player may not make any move which places or leaves his king in check. The possible ways to get out of check are:
+
+Move the king to a square where it is not threatened.
+Capture the threatening piece (possibly with the king).
+Block the check by placing a piece between the king and the opponent's threatening piece (Just & Burg 2003:27), (Polgar & Truong 2005:32,103), (Burgess 2009:550).
+
+
+-- STALE MATE--
+The game is automatically a draw if the player to move is not in check but has no legal move. This situation is called a stalemate. An example of such a position is shown in the diagram to the right.

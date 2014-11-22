@@ -1,0 +1,51 @@
+<div>
+    <style type="text/css">
+        .chess-board td.square {
+            border: 1px solid #ccc;
+        }
+        .chess-board td.square:hover {
+            background-color: #EC6767 !important;
+            cursor: pointer;
+        }
+        .chess-board span {
+            color:#000;
+            display:block;
+            font-size:20px;
+            position:relative;
+            text-decoration:none;
+        }
+        .chess-board td, #chess-board tr {
+            background:#fff;
+            height:20px;
+            width:20px;
+            text-align:center;
+            vertical-align:middle;
+        }
+        .chess-board tr:nth-child(odd) td.square:nth-child(even), .chess-board tr:nth-child(even) td.square:nth-child(odd) {
+            background:#ccc;
+        }
+
+    </style>
+
+    <table class="chess-board">
+    {% for rank in position.board | reverse %}
+        <tr>
+            <td>
+                <span>{{ 9 - loop.index}}</span>
+            </td>
+            {% set outer_loop = loop %}
+            {% for piece in rank %}
+            <td id="{{ 8 - outer_loop.index }}-{{loop.index-1}}" class="square">
+                <span>{% if piece.colour == True %}{{piece.html_white | safe}}{% elif piece.colour == False %}{{piece.html_black | safe}}{% endif %}</span>
+            </td>
+            {% endfor %}
+        </tr>
+
+    {% endfor %}
+        <tr>
+            <td>-</td>
+            <td><span>a</span></td><td><span>b</span></td><td><span>c</span></td><td><span>d</span></td><td><span>e</span></td><td><span>f</span></td><td><span>g</span></td><td><span>h</span></td>
+        </tr>
+
+    </table>
+</div>

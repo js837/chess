@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chess Board</title>
+    <meta charset="utf-8"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        $( document ).ready(function() {
+            from = null;
+            from_elem = null;
+            to=null;
+            to_elem = null;
+            $('td.square').click(function(event){
+                if (!from){
+                    from = $(this).attr('id')
+                    from_elem = $(this);
+                } else {
+                    if (!to){
+                        to = $(this).attr('id')
+                        to_elem = $(this)
+
+                        // Move the pieces
+                        //from_text = from_elem.find('span').text()
+                        //to_elem.find('span').text(from_text)
+                        //from_elem.find('span').text('')
+
+                        //submit the move
+                        $('#submit-move').find('input').val(from + ' ' + to)
+                        $('#submit-move').submit()
+
+                    }
+                }
+                console.log(from,to)
+            })
+
+
+
+
+
+            $('input').click(function(event){
+                event.preventDefault();
+                debugger;
+                $.post('/children'
+
+                )
+
+            })
+
+        });
+
+
+    </script>
+
+    <style type="text/css">
+        td.square {
+            border: 1px solid #ccc;
+        }
+        #error{
+            font-size: 18px;
+            color: red;
+            font-weight: bold;
+        }
+        td.square:hover {
+            background-color: #EC6767 !important;
+            cursor: pointer;
+        }
+        span {
+            color:#000;
+            display:block;
+            font-size:40px;
+            position:relative;
+            text-decoration:none;
+        }
+        #chess-board {
+
+        }
+        #chess-board td, #chess-board tr {
+            background:#fff;
+            height:55px;
+            width:55px;
+            text-align:center;
+            vertical-align:middle;
+        }
+        #chess-board tr:nth-child(odd) td.square:nth-child(even), #chess-board tr:nth-child(even) td.square:nth-child(odd) {
+            background:#ccc;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+
+    <table id="chess-board">
+    {% for rank in position.board | reverse %}
+        <tr>
+            <td>
+                <span>{{ 9 - loop.index}}</span>
+            </td>
+            {% set outer_loop = loop %}
+            {% for piece in rank %}
+            <td id="{{ 8 - outer_loop.index }}-{{loop.index-1}}" class="square">
+
+
+                <span>{% if piece.colour == True %}{{piece.html_white | safe}}{% elif piece.colour == False %}{{piece.html_black | safe}}{% endif %}</span>
+            </td>
+            {% endfor %}
+        </tr>
+
+    {% endfor %}
+        <tr>
+            <td>-</td>
+            <td><span>a</span></td><td><span>b</span></td><td><span>c</span></td><td><span>d</span></td><td><span>e</span></td><td><span>f</span></td><td><span>g</span></td><td><span>h</span></td>
+        </tr>
+
+    </table>
+
+    <div id="error">
+        {{error}}
+    </div>
+
+    <div style="display: none;" id="move-list">
+        {{position.get_pgn_moves().keys()}}
+    </div>
+
+    <div>
+        Rank: {{ position.evaluate() }}
+    </div>
+
+    <form>
+        <input type="hidden" value="{{ position.to_fen() }}"/>
+        <input type="submit" value="Get child moves"/>
+    </form>
+
+
+</body>
+
+</html>

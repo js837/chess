@@ -1,0 +1,7 @@
+*.pyc
+static/libs/
+versions/
+games/
+.idea/
+*.pdf
+*.exe

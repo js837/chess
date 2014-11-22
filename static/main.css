@@ -1,0 +1,33 @@
+.chess-board td.square {
+    border: 1px solid #ccc;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+.chess-board td.square:hover {
+    /*background-color: #EC6767 !important;*/
+}
+.chess-board td.square.highlight {
+    background-color: #ffd110 !important;
+}
+.chess-board span {
+    color:#000;
+    display:block;
+    font-size:6vmin;
+    position:relative;
+    text-decoration:none;
+}
+.chess-board td, .chess-board tr {
+    background:#fff;
+    height:9vmin;
+    width:9vmin;
+    text-align:center;
+    vertical-align:middle;
+}
+.chess-board tr:nth-child(odd) td.square:nth-child(even), .chess-board tr:nth-child(even) td.square:nth-child(odd) {
+    background:#ccc;
+}

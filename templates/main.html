@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Chess</title>
+    <link href="/static/libs/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/static/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- Knockout -->
+    <script src="/static/libs/knockout/3.2.0/knockout.min.js"></script>
+    <link href="/static/main.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Chess AI</h1>
+            <p>Jake Stacey {{time.strftime("%Y")}}</p>
+        </div>
+        <p class="button-row">
+            <button class="btn btn-xs btn-default" data-bind="click: newGame" type="button">New game</button>
+            <button class="btn btn-xs btn-info" type="button">Show game info</button>
+        </p>
+        <p>
+            <table class="chess-board">
+                <tbody data-bind="foreach: board">
+                    <tr data-bind="foreach: $data">
+                        <td data-bind="css: {highlight: hightlight}, event: {click: selectSquare}" class="square">
+                            <span data-bind="html: pieceHtml"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script src="/static/board.js"></script>
+        </p>
+    </div>
+</body>
+</html>
