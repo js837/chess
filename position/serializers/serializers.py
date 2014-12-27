@@ -12,7 +12,7 @@ class PositionSerializer(object):
             blank_count = 0
             for j, piece in enumerate(rank):
                 if piece is None:
-                     blank_count += 1
+                    blank_count += 1
                 else:
                     if blank_count > 0:
                         board_str_list.append(str(blank_count))

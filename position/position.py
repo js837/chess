@@ -3,6 +3,7 @@ from collections import defaultdict, namedtuple
 from helpers.coord import *
 
 
+
 WHITE, BLACK = True, False  # So can easily flip between colours
 DRAW = 0.5
 
@@ -19,8 +20,8 @@ class Position(object):
         self.half_move = half_move
         self.full_move = full_move
 
-        self.white_king_coord = white_king_coord
-        self.black_king_coord = black_king_coord
+        self.white_king_coord = None
+        self.black_king_coord = None
 
         # Find the Kings
         from pieces import King
@@ -118,6 +119,8 @@ class Position(object):
 
     def get_pgn_moves(self, colour=None):
         """Give the PGN notation for this move"""
+        if colour is None:
+            colour = self.active_colour
 
         destintation_dict = defaultdict(tuple)
         ret = dict()
@@ -142,13 +145,14 @@ class Position(object):
 
             # Loop through moves and print notation for moves
             for position in destintation_dict[coord_to, piece]:
-                notation = self.get_notation_for_move(position, ambiguity=ambiguity)
+                notation = self.get_notation_for_move(position, colour, ambiguity=ambiguity)
                 ret[notation] = position
 
         return ret
 
-    def get_notation_for_move(self, position, ambiguity=''):
-        from pieces import King
+    def get_notation_for_move(self, position, colour, ambiguity=''):
+        from pieces import King, Pawn
+
         # Castling
         move=position.last_move
 
@@ -162,12 +166,19 @@ class Position(object):
             if move.coord_to[1] == 2:
                 return 'O-O-O' # Queenside
 
+
         # For en passant captures always specify file of departure
         if move.en_passant_flag:
             ambiguity = 'RANK'
             capture_coord = move.coord_to + self.step_back
         else:
             capture_coord = move.coord_to
+
+
+        # When a pawn makes a capture, the file from which the pawn departed is used to identify the pawn
+        if isinstance(self[move.coord_from], Pawn) and self[capture_coord]:
+            ambiguity = 'RANK'
+
 
         # Deal with ambiguity with coord_to
         if ambiguity == 'NONE':
@@ -185,9 +196,9 @@ class Position(object):
                 'amb': amb,
                 'capture': 'x' if self[capture_coord] else '',
                 'rankfile': Position.get_rank_file(move.coord_to),
-                'promotion': move.new_piece.algebraic_name if move.new_piece else '',
+                'promotion': '={}'.format(move.new_piece.algebraic_name) if move.new_piece else '',
                 'en_passant': 'e.p.' if move.en_passant_flag else '',
-                'check': '+' if position.in_check(position.active_colour) else '',
+                'check': '+' if position.in_check(not colour) else '',
             }
 
     def move_piece(self, coord_from, coord_to, new_piece=None, en_passant_capture_coord=None):

@@ -1,4 +1,5 @@
 import multiprocessing as mp
+from serializers import PositionSerializer
 
 class MinimaxLookahead(object):
     """"Basic Minimax (with Alpha/Beta) look-ahead"""
@@ -21,10 +22,25 @@ class MinimaxLookahead(object):
 
         return explored
 
+    cache = {}
+
+    @classmethod
+    def get_moves(cls, position):
+
+        # fen = PositionSerializer.to_fen(position)
+        # if fen not in cls.cache:
+        #     cls.cache[fen] = position.get_moves()
+        # else:
+        #     print position, len(cls.cache)
+        #
+        # return cls.cache[fen]
+
+        return position.get_moves()
+
     @classmethod
     def get_best_move(cls, position, depth=3):
         """Minimax with Alphabeta"""
-        ret = min(position.get_moves(), key=lambda new_position: cls.alphabeta_helper(new_position, depth-1, float('-Inf'), float('+Inf')))
+        ret = min(cls.get_moves(position), key=lambda new_position: cls.alphabeta_helper(new_position, depth-1, float('-Inf'), float('+Inf')))
         return ret
 
     @classmethod
@@ -33,7 +49,7 @@ class MinimaxLookahead(object):
         if depth == 0:
             return cls.evaluate(position)
 
-        moves = position.get_moves()
+        moves = cls.get_moves(position)
 
         if len(moves)==0:
             return cls.evaluate(position)

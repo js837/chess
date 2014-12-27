@@ -1,8 +1,19 @@
-from pieces import King, Queen, Bishop, Knight, Rook, Pawn
-from serializers import PositionSerializer
 from ai.metrics import EvaluationFunction, AI, MinimaxLookahead
+from serializers import PositionSerializer
+from pieces import King, Queen, Bishop, Knight, Rook, Pawn
 
 
+
+PIECE_MASK = (
+    (0,1,2,3,3,2,1,0),
+    (1,2,3,4,4,3,2,1),
+    (2,3,4,5,5,4,3,2),
+    (4,5,6,7,8,6,5,4),
+    (4,5,6,7,8,6,5,4),
+    (2,3,4,5,5,4,3,2),
+    (1,2,3,4,4,3,2,1),
+    (0,1,2,3,3,2,1,0),
+)
 
 
 class ShannonAI(MinimaxLookahead, EvaluationFunction, AI):
@@ -11,14 +22,15 @@ class ShannonAI(MinimaxLookahead, EvaluationFunction, AI):
     @classmethod
     def evaluate(cls, position, colour=None, *args, **kwargs):
         """ Basic Shannon Eval function as below ###
-        # 200*(K-K')
-        # + 9*(Q-Q')
-        # + 5*(R-R')
-        # + 3*(B-B' + N-N')
-        # + 1*(P-P')
+        # 2000*(K-K')
+        # + 90*(Q-Q')
+        # + 50*(R-R')
+        # + 30*(B-B' + N-N')
+        # + 10*(P-P')
 
-        # - 0.5*(D-D' + S-S' + I-I')
-        # + 0.1*(M-M') + ..."""
+        # - 5*(D-D' + S-S' + I-I')
+        # + 1*(M-M') + ..."""
+
 
         if colour is None:
             colour = position.active_colour
@@ -33,25 +45,23 @@ class ShannonAI(MinimaxLookahead, EvaluationFunction, AI):
             sign = 1 if piece and colour== piece.colour else -1
             piece_class = type(piece)
 
-            # Weight centre of board higher
-            x_weight = 3-abs(coord[0]-3)
-            y_weight = 3-abs(coord[1]-3)
-
-            weight = x_weight + y_weight
+            if piece:
+                weight = PIECE_MASK[coord[0]][coord[1]]
+            else:
+                weight = 0
 
             if piece_class is King:
-                weight += 200
-
+                weight += 2000
             elif piece_class is Queen:
-                weight += 9
+                weight += 90
             elif isinstance(piece, Bishop):
-                weight += 5
+                weight += 50
             elif isinstance(piece, Knight):
-                weight += 3
+                weight += 30
             elif isinstance(piece, Rook):
-                weight += 3
+                weight += 30
             elif isinstance(piece, Pawn):
-                weight += 1
+                weight += 10
             elif piece is None:
                 weight += 0
             rank += weight * sign

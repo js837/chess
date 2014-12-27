@@ -13,11 +13,11 @@ class Pawns(unittest.TestCase):
                       ' ........\n' #3
                       ' ........\n' #2
                       ' ........')  #1
-        # abcdefgh
+                      # abcdefgh
 
 
         position=new_game(test_board)
-        self.assertEqual(set(position.get_pgn_moves().keys()), set(['xe5','xg5','b6', 'f5']))
+        self.assertEqual(set(position.get_pgn_moves().keys()), set(['fxe5','fxg5','b6', 'f5']))
 
     def test_pawn_en_passant(self):
         test_board = (' ........\n' #8
@@ -94,7 +94,7 @@ class Pawns(unittest.TestCase):
                       ' ........')  #1
                       # abcdefgh
         position=new_game(test_board)
-        self.assertEqual(set(position.get_pgn_moves(WHITE).keys()), {'e8Q','e8B','e8R','e8N'})
+        self.assertEqual(set(position.get_pgn_moves(WHITE).keys()), {'e8=Q','e8=B','e8=R','e8=N'})
 
 
 

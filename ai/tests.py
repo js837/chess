@@ -1,7 +1,8 @@
 import cProfile
 import unittest
-from ai.algorithms import MinimaxLookahead
+
 from helpers.general import new_game
+from algorithms import MinimaxLookahead
 from basic import ShannonAI
 from serializers import PositionSerializer
 import time
@@ -13,6 +14,12 @@ class Evaluation(unittest.TestCase):
         position = new_game()
         self.assertIsInstance(ShannonAI.evaluate(position), (float, int))
 
+
+    def test_position_metric(self):
+        position = new_game()
+        for i,move in enumerate(position.get_moves()):
+            print i, ShannonAI.evaluate(move, colour=position.active_colour)
+            print move
 
     def test_obvious_move(self):
         test_board = (' .K......\n' #8

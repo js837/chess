@@ -1,6 +1,7 @@
 import unittest
 from position import WHITE, BLACK, DRAW
 from helpers.general import new_game
+from serializers import PositionSerializer
 
 class BasicMoves(unittest.TestCase):
 
@@ -171,7 +172,19 @@ class Check(unittest.TestCase):
         position=new_game(test_board)
         self.assertEqual(position.in_check(WHITE), True)
 
-    def king_in_check(self):
+    def test_place_opponent_in_check(self):
+        position = PositionSerializer.from_fen('1k1r3r/1pqb1p2/p2bpn1p/6p1/P2N4/1BP1B2P/1P2QPP1/R3R1K1 b  - 1 19')
+        self.assertEqual(set(position.get_pgn_moves().keys()), set(['Qa5', 'Rde8', 'Qb6', 'Rhf8', 'Rdg8',
+                                                                     'b5', 'b6', 'g4', 'Bc8', 'Bc5', 'Bc6',
+                                                                     'Nd5', 'Be7', 'Be5', 'Bb4', 'Ba3', 'Nh5',
+                                                                     'Nh7', 'Bh2+', 'h5', 'Rhe8', 'Rhg8', 'Rc8',
+                                                                     'Qc6', 'Qc5', 'Qc4', 'Qc8', 'Rdf8', 'Ng4',
+                                                                     'a5', 'Ne8', 'Bf4', 'e5', 'Ne4', 'Bf8', 'Ng8',
+                                                                     'Bxa4', 'Bb5', 'Be8', 'Rh7', 'Qxc3', 'Bg3', 'Ka7',
+                                                                     'Ka8', 'Kc8']))
+
+
+    def test_king_in_check(self):
         # Note: This would never be reached in a game.
         test_board = (' ........\n' #8
                       ' ........\n' #7
@@ -187,7 +200,7 @@ class Check(unittest.TestCase):
         self.assertEqual(position.in_check(WHITE), True)
         self.assertEqual(position.in_check(BLACK), True)
 
-    def pawn_check(self):
+    def test_pawn_check(self):
         test_board = (' ........\n' #8
                       ' ........\n' #7
                       ' ........\n' #6
