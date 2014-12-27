@@ -26,7 +26,7 @@ class PositionSerializer(object):
 
         board_str = ''.join(board_str_list)
         active_colour_str = 'w' if position.active_colour is WHITE else 'b'
-        castling_str = position.castling
+        castling_str = position.castling or '-'
         en_passant_str = position.get_rank_file(position.en_passant) if position.en_passant else '-'
         half_move_str = str(position.half_move)
         full_move_str = str(position.full_move)
@@ -59,7 +59,7 @@ class PositionSerializer(object):
         # Rest of Properties
         position.board = board
         position.active_colour = WHITE if active_colour_str=='w' else BLACK
-        position.castling = castling_str
+        position.castling = '' if castling_str is '-' else castling_str
         position.en_passant = None if en_passant_str=='-' else Position.get_coord_from_rank_file(en_passant_str)
         position.half_move = int(half_move_str)
         position.full_move = int(full_move_str)

@@ -46,8 +46,16 @@ class Piece(object):
             king_coord = coord_to
 
 
-        last_move = Move(coord_from, coord_to, piece, active_colour, capture=False, en_passant_flag=en_passant_flag,
-                         new_piece=new_piece, check=False)
+        last_move = Move(
+            coord_from,
+            coord_to,
+            piece,
+            active_colour,
+            capture=False,
+            en_passant_flag=en_passant_flag,
+            ew_piece=new_piece, check=False
+        )
+
         if castling is None:
             castling = position.castling
             # Note: last_move.en_passant is a boolean flag specifying if last move was en_passant capture.
