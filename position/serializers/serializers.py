@@ -2,6 +2,18 @@ from position import Position
 from pieces import King, Rook, Knight, Bishop, Queen, Pawn, WHITE, BLACK
 
 
+
+class MoveSerializer(object):
+
+    @classmethod
+    def to_str(cls, move):
+
+        return
+
+
+
+
+
 class PositionSerializer(object):
     mappings = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen, 'K': King, 'P': Pawn}
 

@@ -236,7 +236,7 @@ class Position(object):
 
     @classmethod
     def get_rank_file(cls, coord):
-        return chr(97 + coord[1]) + str(coord[0]+1)
+        return 'abcdefgh'[coord[1]] + '12345678'[coord[0]]
 
     @classmethod
     def get_coord_from_rank_file(cls, rank_file_str):
@@ -252,12 +252,11 @@ class Move(object):
     """
     Holds information for board to make a move.
     """
-    def __init__(self, coord_from, coord_to, piece, active_colour, capture=False,
+    def __init__(self, coord_from, coord_to, piece, capture=False,
                  en_passant_flag=False, new_piece=None, check=False):
         self.coord_from = coord_from
         self.coord_to = coord_to
         self.piece = piece
-        self.active_colour = active_colour
         self.capture = capture
         self.en_passant_flag = en_passant_flag
         self.new_piece = new_piece
@@ -267,7 +266,6 @@ class Move(object):
         return self.coord_from == other.coord_from and \
                self.coord_to==other.coord_to and \
                self.piece==other.piece and \
-               self.active_colour==other.active_colour and \
                self.capture==other.capture and \
                self.en_passant_flag==other.en_passant_flag and \
                self.new_piece==other.new_piece and \

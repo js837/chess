@@ -50,10 +50,10 @@ class Piece(object):
             coord_from,
             coord_to,
             piece,
-            active_colour,
             capture=False,
             en_passant_flag=en_passant_flag,
-            ew_piece=new_piece, check=False
+            new_piece=new_piece,
+            check=False
         )
 
         if castling is None:
