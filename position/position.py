@@ -1,7 +1,7 @@
 from collections import defaultdict, namedtuple
 
 from helpers.coord import *
-
+from helpers.coord import get_rank_file
 
 
 WHITE, BLACK = True, False  # So can easily flip between colours
@@ -57,7 +57,7 @@ class Position(object):
                     piece_short_name = piece.short_name if piece.colour is WHITE else piece.short_name.lower()
                 piece_list.append(piece_short_name)
 
-            piece_list.append( '|%s\n' % str(9-int(self.get_rank_file((i,j))[1])))
+            piece_list.append( '|%s\n' % str(9-int(get_rank_file((i,j))[1])))
         return '--------\n' + ''.join(piece_list) + '--------\n' + 'abcdefgh\n'
 
     def to_html(self):
@@ -184,18 +184,18 @@ class Position(object):
         if ambiguity == 'NONE':
             amb = ''
         elif ambiguity == 'RANK':
-            amb = self.get_rank_file(move.coord_from)[0]
+            amb = get_rank_file(move.coord_from)[0]
         elif ambiguity == 'FILE':
-            amb = self.get_rank_file(move.coord_from)[1]
+            amb = get_rank_file(move.coord_from)[1]
         elif ambiguity == 'BOTH':
-            amb = self.get_rank_file(move.coord_from)
+            amb = get_rank_file(move.coord_from)
 
         return '%(name)s%(amb)s%(capture)s%(rankfile)s%(promotion)s%(en_passant)s%(check)s' % \
             {
                 'name': self[move.coord_from].algebraic_name,
                 'amb': amb,
                 'capture': 'x' if self[capture_coord] else '',
-                'rankfile': Position.get_rank_file(move.coord_to),
+                'rankfile': get_rank_file(move.coord_to),
                 'promotion': '={}'.format(move.new_piece.algebraic_name) if move.new_piece else '',
                 'en_passant': 'e.p.' if move.en_passant_flag else '',
                 'check': '+' if position.in_check(not colour) else '',
@@ -228,24 +228,13 @@ class Position(object):
     def is_empty_square(self, coord):
         # Maybe should integrate this into get item?
 
-        return self.is_valid_sqaure(coord) and not(self[coord])
+        return is_valid_sqaure(coord) and not(self[coord])
 
     @property
     def step_back(self):
         return S if self.active_colour is WHITE else N
 
-    @classmethod
-    def get_rank_file(cls, coord):
-        return 'abcdefgh'[coord[1]] + '12345678'[coord[0]]
 
-    @classmethod
-    def get_coord_from_rank_file(cls, rank_file_str):
-        return (int(rank_file_str[1])-1, ord(rank_file_str[0])-97)
-
-    @classmethod
-    def is_valid_sqaure(cls, coord):
-        """Check that coordinate is is valid sqaure"""
-        return 0<=coord[0]<=7 and 0<=coord[1]<=7
 
 
 class Move(object):

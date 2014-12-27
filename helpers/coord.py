@@ -1,6 +1,17 @@
 import operator
 
 
+def get_rank_file(coord):
+    return 'abcdefgh'[coord[1]] + '12345678'[coord[0]]
+
+
+def get_coord_from_rank_file(rank_file_str):
+    return '12345678'.index(rank_file_str[1]), 'abcdefgh'.index(rank_file_str[0])
+
+
+def is_valid_sqaure(coord):
+    """Check that coordinate is is valid sqaure"""
+    return 0 <= coord[0] <= 7 and 0 <= coord[1] <= 7
 
 
 class Coord(tuple):

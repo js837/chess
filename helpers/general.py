@@ -2,6 +2,9 @@ from position import Position, WHITE, BLACK
 from pieces import King, Rook, Knight, Bishop, Queen, Pawn
 
 
+
+
+
 def new_game(board_str = None):
     """Creates a new game based on text representation"""
     mappings = {'R': Rook, 'N': Knight, 'B': Bishop, 'Q': Queen, 'K': King, 'P': Pawn}

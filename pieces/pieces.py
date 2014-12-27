@@ -86,7 +86,7 @@ class Piece(object):
         for move in self.moves:
             coord_to = coord + move
 
-            while Position.is_valid_sqaure(coord_to):
+            while is_valid_sqaure(coord_to):
 
                 captured_piece = position[coord_to]
 
@@ -134,7 +134,7 @@ class Pawn(Piece):
 
         for move in (take_left, take_right):
             coord_to = coord + move
-            if Position.is_valid_sqaure(coord_to):
+            if is_valid_sqaure(coord_to):
                 captured_piece = position[coord_to]
                 # There must be a piece at i_to capture
                 if captured_piece and (captured_piece.colour != self.colour):
@@ -187,7 +187,7 @@ class Pawn(Piece):
         for move in (take_left, take_right):
             # There must be a piece at i_to capture or en-passent
             coord_to = coord + move
-            if Position.is_valid_sqaure(coord_to):
+            if is_valid_sqaure(coord_to):
                 captured_piece = position[coord_to]
                 if position.en_passant == coord_to or (captured_piece and (captured_piece.colour != self.colour)):
                     new_position = self.get_new_position(position, coord, coord_to)

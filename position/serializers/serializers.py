@@ -1,3 +1,4 @@
+from helpers.coord import get_rank_file
 from position import Position
 from pieces import King, Rook, Knight, Bishop, Queen, Pawn, WHITE, BLACK
 
@@ -39,7 +40,7 @@ class PositionSerializer(object):
         board_str = ''.join(board_str_list)
         active_colour_str = 'w' if position.active_colour is WHITE else 'b'
         castling_str = position.castling or '-'
-        en_passant_str = position.get_rank_file(position.en_passant) if position.en_passant else '-'
+        en_passant_str = get_rank_file(position.en_passant) if position.en_passant else '-'
         half_move_str = str(position.half_move)
         full_move_str = str(position.full_move)
 
