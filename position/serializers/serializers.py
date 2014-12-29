@@ -1,17 +1,6 @@
-from helpers.coord import get_rank_file
-from position import Position
+from helpers.coord import get_rank_file, get_coord_from_rank_file
+from position import Position, Move
 from pieces import King, Rook, Knight, Bishop, Queen, Pawn, WHITE, BLACK
-
-
-
-class MoveSerializer(object):
-
-    @classmethod
-    def to_str(cls, move):
-
-        return
-
-
 
 
 
@@ -60,7 +49,7 @@ class PositionSerializer(object):
         for rank_str in board_str.split('/'):
             rank = tuple()
             for piece_str in rank_str:
-                if piece_str in ('1','2','3','4','5','6','7','8',):
+                if piece_str in '12345678':
                     # Blanks
                     rank += (None,) * int(piece_str)
                 else:
@@ -73,8 +62,30 @@ class PositionSerializer(object):
         position.board = board
         position.active_colour = WHITE if active_colour_str=='w' else BLACK
         position.castling = '' if castling_str is '-' else castling_str
-        position.en_passant = None if en_passant_str=='-' else Position.get_coord_from_rank_file(en_passant_str)
+        position.en_passant = None if en_passant_str=='-' else get_coord_from_rank_file(en_passant_str)
         position.half_move = int(half_move_str)
         position.full_move = int(full_move_str)
 
         return position
+
+
+class MoveSerializer(object):
+
+    @classmethod
+    def to_str(cls, move):
+        coord_from_str = get_rank_file(move.coord_from)
+        coord_to_str = get_rank_file(move.coord_to)
+        new_piece_class_str = move.new_piece_class.algebraic_name if move.new_piece_class else '-'
+        return '{}/{}/{}'.format(coord_from_str, coord_to_str, new_piece_class_str)
+
+    @classmethod
+    def from_str(cls, move_str):
+        coord_from_str, coord_to_str, new_piece_class_str = move_str.split('/')
+
+        coord_from = get_coord_from_rank_file(coord_from_str)
+        coord_to = get_coord_from_rank_file(coord_to_str)
+        if new_piece_class_str == '-':
+            new_piece_class = None
+        else:
+            new_piece_class_class = PositionSerializer.mappings[new_piece_class_str] # Is this an instance?
+        return Move(coord_from, coord_to, new_piece_class_class)

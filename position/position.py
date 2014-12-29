@@ -126,8 +126,15 @@ class Position(object):
         ret = dict()
 
         ## Build a destination dict to check for ambiguous moves.
+
+
+
         for new_position in self.get_moves(colour):
-            destintation_dict[(new_position.last_move.coord_to, new_position.last_move.piece)] += (new_position,)
+            coord_to = new_position.last_move.coord_to
+            piece = type(self[new_position.last_move.coord_from])
+
+
+            destintation_dict[(coord_to, piece)] += (new_position,)
         
         for coord_to, piece in destintation_dict.keys():
             # Check for ambigious moves
@@ -157,18 +164,23 @@ class Position(object):
         move=position.last_move
 
         # If there is a pawn promotion then this move is not ambigous
-        if move.new_piece:
+        if move.new_piece_class:
             ambiguity = 'NONE'
 
+        # Special case of castling
         if isinstance(self[move.coord_from], King) and move.coord_from[1] == 4:
+            check = '+' if position.in_check(not colour) else ''
             if move.coord_to[1] == 6:
-                return 'O-O' # Kingside
+                castling_str = 'O-O'
+                return '{}{}'.format(castling_str, check) # Kingside
             if move.coord_to[1] == 2:
-                return 'O-O-O' # Queenside
+                castling_str = 'O-O-O'
+                return '{}{}'.format(castling_str, check) # Queenside
 
 
+        en_passant_flag = isinstance(self[move.coord_from], Pawn) and self.en_passant == move.coord_to
         # For en passant captures always specify file of departure
-        if move.en_passant_flag:
+        if en_passant_flag:
             ambiguity = 'RANK'
             capture_coord = move.coord_to + self.step_back
         else:
@@ -196,15 +208,20 @@ class Position(object):
                 'amb': amb,
                 'capture': 'x' if self[capture_coord] else '',
                 'rankfile': get_rank_file(move.coord_to),
-                'promotion': '={}'.format(move.new_piece.algebraic_name) if move.new_piece else '',
-                'en_passant': 'e.p.' if move.en_passant_flag else '',
+                'promotion': '={}'.format(move.new_piece_class.algebraic_name) if move.new_piece_class else '',
+                'en_passant': 'e.p.' if en_passant_flag else '',
                 'check': '+' if position.in_check(not colour) else '',
             }
 
-    def move_piece(self, coord_from, coord_to, new_piece=None, en_passant_capture_coord=None):
+    def move_piece(self, coord_from, coord_to, new_piece_class=None, en_passant_capture_coord=None):
         """Return a copy of the board"""
 
-        piece = new_piece or self[coord_from]
+        old_piece = self[coord_from]
+        if new_piece_class:
+            piece = new_piece_class(old_piece.colour)
+        else:
+            piece = old_piece
+
         board = self.board
 
         # If en-passant then must remove captured pawn.
@@ -241,24 +258,19 @@ class Move(object):
     """
     Holds information for board to make a move.
     """
-    def __init__(self, coord_from, coord_to, piece, capture=False,
-                 en_passant_flag=False, new_piece=None, check=False):
+    def __init__(self, coord_from, coord_to, new_piece_class=None):
+
+        # Compulsory info
         self.coord_from = coord_from
         self.coord_to = coord_to
-        self.piece = piece
-        self.capture = capture
-        self.en_passant_flag = en_passant_flag
-        self.new_piece = new_piece
-        self.check = check
+        self.new_piece_class = new_piece_class
+
+
 
     def __eq__(self, other):
         return self.coord_from == other.coord_from and \
                self.coord_to==other.coord_to and \
-               self.piece==other.piece and \
-               self.capture==other.capture and \
-               self.en_passant_flag==other.en_passant_flag and \
-               self.new_piece==other.new_piece and \
-               self.check==other.check
+               self.new_piece_class is other.new_piece_class
 
 
 

@@ -3,7 +3,12 @@ import sys
 from collections import Counter
 
 from general import new_game
-from position.serializers import PositionSerializer
+from position.serializers import PositionSerializer, MoveSerializer
+
+import logging
+
+LOG_FILENAME = 'logging_example.out'
+logging.basicConfig(filename=LOG_FILENAME,  level=logging.DEBUG)
 
 """
 PGN Parser
@@ -37,7 +42,6 @@ Rf2 61.Kc5 1/2-1/2"""
 if __name__ == '__main__':
 
 
-    transpositions = {}
     lines = []
 
     input_file = sys.argv[1]
@@ -56,11 +60,16 @@ if __name__ == '__main__':
 
 
     for game_num, game in enumerate(pgn_games):
+
+
         if not game:
             continue
 
         if max_games is not None and game_num > max_games:
             break
+
+        if game_num != 152:
+            continue
 
 
         game = game.replace('\n',' ')
@@ -89,15 +98,18 @@ if __name__ == '__main__':
                             position = pgn_moves[key]
                             break
                     else:
-                        print pgn_moves.keys()
+                        logging.debug('Error at game {} in file {}'.format(str(game_num), input_file))
+                        logging.debug(str(pgn_moves.keys()))
+                        logging.debug(str(move))
+                        logging.debug(str(moves))
+                        logging.debug('----------------------------------')
                         import pdb; pdb.set_trace()
+                        break
 
 
-            to_fen = PositionSerializer.to_fen(position)
+            move_str = MoveSerializer.to_str(position.last_move)
 
-            transpositions.setdefault(to_fen, []).append(from_fen)
-
-            line = u'{},{}'.format(from_fen, to_fen)
+            line = u'{},{}'.format(from_fen, move_str)
             lines.append(line)
 
     with open(output_file, 'wb') as output:

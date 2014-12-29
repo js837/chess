@@ -1,4 +1,4 @@
-from helpers.coord import get_rank_file
+from helpers.coord import get_rank_file, get_coord_from_rank_file
 from position import Position
 from pieces import King, Rook, Knight, Bishop, Queen, Pawn, WHITE, BLACK
 
@@ -61,7 +61,7 @@ class PositionSerializer(object):
         position.board = board
         position.active_colour = WHITE if active_colour_str=='w' else BLACK
         position.castling = castling_str
-        position.en_passant = None if en_passant_str=='-' else Position.get_coord_from_rank_file(en_passant_str)
+        position.en_passant = None if en_passant_str=='-' else get_coord_from_rank_file(en_passant_str)
         position.half_move = int(half_move_str)
         position.full_move = int(full_move_str)
 

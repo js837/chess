@@ -16,7 +16,7 @@ class Piece(object):
         self.colour = colour
 
 
-    def get_new_position(self, position, coord_from, coord_to, en_passant=None, new_piece=None, castling=None):
+    def get_new_position(self, position, coord_from, coord_to, en_passant=None, new_piece_class=None, castling=None):
         """ Generate a new position for move: coord_from --> coord_to"""
 
         # En-passant logic, slightly messy...
@@ -49,11 +49,7 @@ class Piece(object):
         last_move = Move(
             coord_from,
             coord_to,
-            piece,
-            capture=False,
-            en_passant_flag=en_passant_flag,
-            new_piece=new_piece,
-            check=False
+            new_piece_class=new_piece_class
         )
 
         if castling is None:
@@ -61,7 +57,7 @@ class Piece(object):
             # Note: last_move.en_passant is a boolean flag specifying if last move was en_passant capture.
 
 
-        new_board = position.move_piece(coord_from, coord_to, new_piece, en_passant_capture_coord=capture_coord)
+        new_board = position.move_piece(coord_from, coord_to, new_piece_class, en_passant_capture_coord=capture_coord)
         active_colour = not position.active_colour
 
 
@@ -167,8 +163,7 @@ class Pawn(Piece):
             # Promotion
             if coord_new[0] == final_line:
                 for piece_class in Rook, Bishop, Knight, Queen:
-                    new_piece = piece_class(self.colour)
-                    new_position = self.get_new_position(position, coord, coord_new, new_piece=new_piece)
+                    new_position = self.get_new_position(position, coord, coord_new, new_piece_class=piece_class)
                     moves += (new_position,)
             else:
                 new_position = self.get_new_position(position, coord, coord_new)
@@ -190,8 +185,13 @@ class Pawn(Piece):
             if is_valid_sqaure(coord_to):
                 captured_piece = position[coord_to]
                 if position.en_passant == coord_to or (captured_piece and (captured_piece.colour != self.colour)):
-                    new_position = self.get_new_position(position, coord, coord_to)
-                    moves += (new_position,)
+                    if coord_to[0] == final_line:
+                        for piece_class in Rook, Bishop, Knight, Queen:
+                            new_position = self.get_new_position(position, coord, coord_to, new_piece_class=piece_class)
+                            moves += (new_position,)
+                    else:
+                        new_position = self.get_new_position(position, coord, coord_to)
+                        moves += (new_position,)
 
 
 
