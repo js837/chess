@@ -110,18 +110,19 @@ class Pawns(unittest.TestCase):
         position=new_game(test_board)
         self.assertEqual(set(position.get_pgn_moves(WHITE).keys()), {'dxe8=Q','dxe8=B','dxe8=R','dxe8=N'})
 
-    # def test_capture_and_promote_into_check(self):
-    #     test_board = (' ...pr..k\n' #8
-    #                   ' ...P....\n' #7
-    #                   ' ........\n' #6
-    #                   ' ........\n' #5
-    #                   ' ........\n' #4
-    #                   ' ........\n' #3
-    #                   ' ........\n' #2
-    #                   ' ........')  #1
-    #                   # abcdefgh
-    #     position=new_game(test_board)
-    #     self.assertEqual(set(position.get_pgn_moves(WHITE).keys()), {'e8=Q','e8=B','e8=R','e8=N'})
+
+    def test_capture_and_promote_into_check(self):
+        test_board = (' ...pr..k\n' #8
+                      ' ...P....\n' #7
+                      ' ........\n' #6
+                      ' ........\n' #5
+                      ' ........\n' #4
+                      ' ........\n' #3
+                      ' ........\n' #2
+                      ' ........')  #1
+                      # abcdefgh
+        position=new_game(test_board)
+        self.assertEqual(set(position.get_pgn_moves(WHITE).keys()), {'dxe8=B', 'dxe8=Q+', 'dxe8=N', 'dxe8=R+'})
 
 
 

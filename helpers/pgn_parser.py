@@ -7,7 +7,7 @@ from position.serializers import PositionSerializer, MoveSerializer
 
 import logging
 
-LOG_FILENAME = 'logging_example.out'
+LOG_FILENAME = 'logging_example2.out'
 logging.basicConfig(filename=LOG_FILENAME,  level=logging.DEBUG)
 
 """
@@ -61,22 +61,17 @@ if __name__ == '__main__':
 
     for game_num, game in enumerate(pgn_games):
 
-
         if not game:
             continue
 
         if max_games is not None and game_num > max_games:
             break
 
-        if game_num != 152:
-            continue
-
-
         game = game.replace('\n',' ')
         moves = re.split(r'\s{1,}', game)
 
         position = new_game()
-        print game_num
+        print '{}/{}'.format(str(game_num), str(len(pgn_games)))
 
         for move in moves:
             move = re.sub(r'\d+\.', '', move)
@@ -97,13 +92,16 @@ if __name__ == '__main__':
                         if key.replace('e.p.','') == move:
                             position = pgn_moves[key]
                             break
+                        if key.replace('+','#') == move:
+                            position = pgn_moves[key]
+                            break
                     else:
                         logging.debug('Error at game {} in file {}'.format(str(game_num), input_file))
                         logging.debug(str(pgn_moves.keys()))
                         logging.debug(str(move))
                         logging.debug(str(moves))
+                        logging.debug(from_fen)
                         logging.debug('----------------------------------')
-                        import pdb; pdb.set_trace()
                         break
 
 

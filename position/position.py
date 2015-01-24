@@ -20,10 +20,9 @@ class Position(object):
         self.half_move = half_move
         self.full_move = full_move
 
+        # Find the Kings (if they exist - this may be a test board)
         self.white_king_coord = None
         self.black_king_coord = None
-
-        # Find the Kings
         from pieces import King
         if self.white_king_coord is None or self.black_king_coord is None:
             for piece, coord in self.iter_pieces():
@@ -60,6 +59,7 @@ class Position(object):
             piece_list.append( '|%s\n' % str(9-int(get_rank_file((i,j))[1])))
         return '--------\n' + ''.join(piece_list) + '--------\n' + 'abcdefgh\n'
 
+
     def to_html(self):
         from jinja2 import Template
         from IPython.display import HTML
@@ -74,31 +74,24 @@ class Position(object):
                 yield piece, Coord(i,j)
 
     def in_check(self, colour):
-
         """ Decide if this position is in check for this colour (by iterating away from the king) """
         from pieces import King, Queen, Bishop, Knight, Rook, Pawn
-
         king_coord = self.white_king_coord if colour is WHITE else self.black_king_coord
         if king_coord is None:
             return False
-
         for piece_class in King, Queen, Bishop, Knight, Rook, Pawn:
             dummy_piece = piece_class(colour = colour)
             for coord_to in dummy_piece.iter_move_coords(self, king_coord):
                 piece = self[coord_to]
                 if isinstance(piece, piece_class) and piece.colour != colour:
                     return True
-
-
         return False
 
     def get_moves_and_result(self, colour=None):
         if colour is None:
             colour = self.active_colour
-
         moves = self.get_moves(colour)
         result = None
-
         if not moves:
             if self.in_check(colour):  # Result
                 result = not colour

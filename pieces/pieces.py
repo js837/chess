@@ -9,13 +9,12 @@ class Piece(object):
     short_name = '.'
     algebraic_name = '.'
     unicode_html = '&#9812;'
-
     many = False
 
     def __init__(self, colour=WHITE):
         self.colour = colour
 
-
+    #TODO: This should move to position
     def get_new_position(self, position, coord_from, coord_to, en_passant=None, new_piece_class=None, castling=None):
         """ Generate a new position for move: coord_from --> coord_to"""
 
@@ -26,25 +25,8 @@ class Piece(object):
         else:
             capture_coord = coord_to
 
-
-
-
         captured_piece = position[capture_coord]
         piece = type(position[coord_from])
-        active_colour = position.active_colour
-
-
-        # Update King coordinate
-        white_king_coord = position.white_king_coord
-        black_king_coord = position.black_king_coord
-        if isinstance(position[coord_from], King):
-            if position[coord_from].colour is WHITE:
-                white_king_coord = coord_to
-            else:
-                black_king_coord = coord_to
-
-            king_coord = coord_to
-
 
         last_move = Move(
             coord_from,
@@ -54,14 +36,9 @@ class Piece(object):
 
         if castling is None:
             castling = position.castling
-            # Note: last_move.en_passant is a boolean flag specifying if last move was en_passant capture.
-
 
         new_board = position.move_piece(coord_from, coord_to, new_piece_class, en_passant_capture_coord=capture_coord)
         active_colour = not position.active_colour
-
-
-
 
         half_move = position.half_move
         if not (captured_piece and captured_piece.colour != self.colour or piece is Pawn):
@@ -73,7 +50,14 @@ class Piece(object):
         if position.active_colour == BLACK:
             full_move += 1
 
-        return Position(new_board, active_colour, castling, en_passant, last_move, half_move, full_move, white_king_coord, black_king_coord)
+        return Position(new_board, active_colour, castling, en_passant, last_move, half_move, full_move)
+
+
+    def iter_move_objects(self, position, coord):
+        """Get Move() objects for a piece at cooord"""
+        for coord_to in self.iter_move_coords(position, coord):
+            yield Move(coord, coord_to, new_piece_class=None)
+
 
     def iter_move_coords(self, position, coord):
         """
@@ -81,25 +65,18 @@ class Piece(object):
         """
         for move in self.moves:
             coord_to = coord + move
-
             while is_valid_sqaure(coord_to):
-
                 captured_piece = position[coord_to]
-
                 # Hit our own piece (this is not a valid move)
                 if captured_piece and captured_piece.colour == self.colour:
                     break
-
                 yield coord_to
-
                 # Cannot make multiple moves eg. if we are not a Bishop, Rook, Queen
                 if not self.many:
                     break
-
                 # Captured opponent piece (this is a valid move but we can't continue in this direction
                 if captured_piece and captured_piece.colour != self.colour:
                     break
-
                 coord_to = coord_to + move
 
     def get_moves(self, position, coord, castling=None):
@@ -114,6 +91,32 @@ class Piece(object):
             ret += (new_position,)
 
         return ret
+
+
+class Knight(Piece):
+    short_name = 'N'
+    algebraic_name = 'N'
+    html_white = '&#9816;'
+    html_black = '&#9822;'
+    moves = (N + NE, N + NW, E + NE, E + SE, S + SE, S + SW, W + SW, W + NW)
+
+
+class Bishop(Piece):
+    many = True
+    short_name = 'B'
+    algebraic_name = 'B'
+    html_white = '&#9815;'
+    html_black = '&#9821;'
+    moves = (NE, SE, SW, NW)
+
+
+class Queen(Piece):
+    many = True
+    short_name = 'Q'
+    algebraic_name = 'Q'
+    html_white = '&#9813;'
+    html_black = '&#9819;'
+    moves = (N, E, S, W, NE, SE, SW, NW)
 
 
 class Pawn(Piece):
@@ -287,27 +290,4 @@ class Rook(Piece):
         return super(Rook, self).get_moves(position, coord, castling=castling)
 
 
-class Knight(Piece):
-    short_name = 'N'
-    algebraic_name = 'N'
-    html_white = '&#9816;'
-    html_black = '&#9822;'
-    moves = (N + NE, N + NW, E + NE, E + SE, S + SE, S + SW, W + SW, W + NW)
 
-
-class Bishop(Piece):
-    many = True
-    short_name = 'B'
-    algebraic_name = 'B'
-    html_white = '&#9815;'
-    html_black = '&#9821;'
-    moves = (NE, SE, SW, NW)
-
-
-class Queen(Piece):
-    many = True
-    short_name = 'Q'
-    algebraic_name = 'Q'
-    html_white = '&#9813;'
-    html_black = '&#9819;'
-    moves = (N, E, S, W, NE, SE, SW, NW)

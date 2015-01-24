@@ -87,5 +87,5 @@ class MoveSerializer(object):
         if new_piece_class_str == '-':
             new_piece_class = None
         else:
-            new_piece_class_class = PositionSerializer.mappings[new_piece_class_str] # Is this an instance?
-        return Move(coord_from, coord_to, new_piece_class_class)
+            new_piece_class = PositionSerializer.mappings[new_piece_class_str] # Is this an instance?
+        return Move(coord_from, coord_to, new_piece_class)

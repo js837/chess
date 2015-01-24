@@ -16,7 +16,7 @@ def get_moves():
     ai = request.form.get('ai')
     position = PositionSerializer.from_fen(fen)
     if ai:
-        position = ShannonAI.get_best_move(position, depth=1)
+        position = ShannonAI.get_best_move(position, depth=3)
         new_fen = PositionSerializer.to_fen(position)
 
     moves, result = position.get_moves_and_result()

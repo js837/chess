@@ -1,0 +1,6 @@
+DEBUG:root:Error at game 7203 in file games/all.pgn
+DEBUG:root:['Qb6', 'Nxe4', 'h6', 'Rd8', 'h5', 'b4', 'Bc8', 'Bc6', 'Be7', 'Kh8', 'Bxd5', 'Nb6', 'Nh5', 'Ra7', 'Qa5', 'g6', 'Re8', 'Rc8', 'Qc6', 'Qc5', 'Nxd5', 'Qc8', 'Ng4', 'a5', 'Ne8', 'Nc5', 'Qd8']
+DEBUG:root:*
+DEBUG:root:['1.e4', 'e5', '2.Nf3', 'Nc6', '3.Bb5', 'a6', '4.Ba4', 'Nf6', '5.O-O', 'Be7', '6.Re1', 'b5', '7.Bb3', 'd6', '8.c3', 'O-O', '9.h3', 'Nb8', '10.d4', 'Nbd7', '11.Nbd2', 'Bb7', '12.Bc2', 'Re8', '13.Nf1', 'Bf8', '14.Ng3', 'c5', '15.d5', 'c4', '16.Bg5', 'Qc7', '17.Qd2', 'Reb8', '18.Nf5', '*']
+DEBUG:root:rr3bk1/1bqn1ppp/p2p1n2/1p1PpNB1/2p1P3/2P2N1P/PPBQ1PP1/R3R1K1 b - - 5 19
+DEBUG:root:----------------------------------
