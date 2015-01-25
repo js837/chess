@@ -15,6 +15,9 @@ app.secret_key = 'A0Zr98j/3yx R~XHH!jmN]LWX/,?RT'
 def get_moves():
     fen = request.json['fen']
     ai = request.json['ai']
+
+
+
     position = PositionSerializer.from_fen(fen)
     new_fen = None
 
@@ -43,7 +46,9 @@ def get_moves():
                     }
         move_dicts.append(move_dict)
 
-    move_dicts.sort(key=lambda x:-abs(x['score']))
+    move_dicts.sort(key=lambda x:x['score'])
+
+
 
     return jsonify({
         'fen': fen,

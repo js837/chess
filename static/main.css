@@ -35,7 +35,7 @@
 .small-board {
     position: absolute;
     margin-left: 71px;
-    margin-top: -11px;
+    margin-top: -190px;
     border: 2px solid grey;
     z-index: 100;
 }
@@ -58,6 +58,10 @@
 ul {
     list-style: none;
     padding-left: 50px;
+}
+
+li {
+    white-space: nowrap;
 }
 
 .score-label {

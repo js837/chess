@@ -124,9 +124,9 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
             }).length
 
 
-            if (self.to && self.from) {
-                var move_from_bool = self.from()[0] === self.coord[0] && self.from()[1] === self.coord[1]
-                var move_to_bool = self.to()[0] === self.coord[0] && self.to()[1] === self.coord[1]
+            if (position.to() && position.from()) {
+                var move_from_bool = position.from()[0] === self.coord[0] && position.from()[1] === self.coord[1]
+                var move_to_bool = position.to()[0] === self.coord[0] && position.to()[1] === self.coord[1]
             }
 
             return selected_bool || move_from_bool || move_to_bool
@@ -151,12 +151,7 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
                     url: '/get-moves'
                 }).done(function(newPosition){
                     position.fen(newPosition.new_fen)
-                    position.result(newPosition.result)
-                    position.moves(newPosition.moves)
-                    position.colour(newPosition.colour)
-                    position.score(newPosition.score)
-                    position.from(newPosition.from)
-                    position.to(newPosition.to)
+                    position.refreshBoard(newPosition)
                 })
 
             } else{
@@ -186,6 +181,28 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
             return move.from[0] === position.startCoord()[0] && move.from[1] === position.startCoord()[1]
         })
     }
+
+
+    this.refreshBoard = function(newPosition){
+        position.result(newPosition.result)
+        position.moves(newPosition.moves)
+        position.colour(newPosition.colour)
+        position.score(newPosition.score)
+        position.from(newPosition.from)
+        position.to(newPosition.to)
+    }
+
+    this.fen.subscribe(function(newFen){
+         $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({fen:newFen,ai:false}),
+            dataType: 'json',
+            url: '/get-moves'
+        }).done(function(newPosition){
+            position.refreshBoard(newPosition)
+        })
+    })
 
 
     this.board = ko.pureComputed(function(){
