@@ -31,23 +31,41 @@
             <button class="btn btn-xs btn-default" data-bind="click: newGame" type="button">New game</button>
             <button class="btn btn-xs btn-info" type="button">Show game info</button>
         </p>
+
+        <input data-bind="value: fen"/>
         
         <div class="tree-view">
-            <span data-bind="text: fen"></span>
-            <ul data-bind="foreach: moves">
-                <li data-bind="text:$data.fen"></li>
-            </ul>
+            <div data-bind="template: { name: 'tree-node', data: tree }"></div>
         </div>
-        
-        <table class="chess-board">
-            <tbody data-bind="foreach: board">
-                <tr data-bind="foreach: $data">
-                    <td data-bind="css: {highlight: hightlight}, event: {click: selectSquare}" class="square">
-                        <span data-bind="html: pieceHtml"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div class="main-board" data-bind="template: { name: 'chess-board', data: $data }"></div>
+
+
+
+        <!-- Board Template -->
+        <script type="text/html" id="chess-board">
+            <table class="chess-board">
+                <tbody data-bind="foreach: board">
+                    <tr data-bind="foreach: $data">
+                        <td data-bind="css: {highlight: hightlight}, event: {click: selectSquare}" class="square">
+                            <span data-bind="html: pieceHtml"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </script>
+
+
+        <!--Tree template-->
+        <script type="text/html" id="tree-node">
+            <span data-bind="text: fen, click: getAvailableMoves"></span>
+            <ul data-bind="foreach: moves">
+                <li>
+                    <div data-bind="template: { name: 'tree-node', data: $data }"></div>
+                </li>
+            </ul>
+        </script>
+
         <script src="/static/board.js"></script>
     </div>
 </body>

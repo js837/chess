@@ -12,27 +12,23 @@ app.secret_key = 'A0Zr98j/3yx R~XHH!jmN]LWX/,?RT'
 
 
 @app.route("/get-moves", methods=['POST'])
-
-
-
-@app.route("/get-moves", methods=['POST'])
 def get_moves():
     fen = request.form.get('fen')
     ai = request.form.get('ai')
     position = PositionSerializer.from_fen(fen)
+    new_fen=None
+
     if ai:
         position = ShannonAI.get_best_move(position, depth=2)
         new_fen = PositionSerializer.to_fen(position)
 
     moves, result = position.get_moves_and_result()
-    result_str = None
-    if result is WHITE:
-        result_str = 'W'
-    elif result is BLACK:
-        result_str = 'B'
-    elif result is DRAW:
-        result_str = '1/2'
+    result_str = {
+        WHITE: 'W',
+        BLACK: 'B',
+        DRAW: '1/2',
 
+    }.get(result, '')
 
     move_dicts = []
     for new_position in moves:

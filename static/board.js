@@ -1,12 +1,20 @@
-var Tree = function(position) {
+var Tree = function(fen) {
     var self = this;
 
-    this.position = position
 
 
-    this.moves = ko.observableArray([])
+    this.fen = fen;
+    //this.position = new ChessPosition()
+
+    this.moves = ko.observableArray([]);
+
     this.getAvailableMoves = function(){
+        $.post('/get-moves', {fen:self.fen, ai:false}).done(function(newPosition){
+            $.each(newPosition.moves, function(i, move){
+                self.moves.push(new Tree(move.fen))
+            })
 
+        })
 
     }
 
@@ -137,6 +145,15 @@ var ChessPosition = function(fen, result, moves) {
         }   
         return board
     })
+
+
+    this.tree = new Tree(this.fen)
+
 }
+
+
+
+
+
 
 ko.applyBindings(new ChessPosition());
