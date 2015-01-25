@@ -45,10 +45,11 @@ class ShannonAI(MinimaxLookahead, EvaluationFunction, AI):
             sign = 1 if piece and colour== piece.colour else -1
             piece_class = type(piece)
 
-            if piece:
-                weight = PIECE_MASK[coord[0]][coord[1]]
-            else:
-                weight = 0
+            weight = 0
+            # if piece:
+            #     weight = PIECE_MASK[coord[0]][coord[1]]
+            # else:
+            #     weight = 0
 
             if piece_class is King:
                 weight += 2000
