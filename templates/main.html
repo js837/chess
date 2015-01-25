@@ -58,7 +58,7 @@
 
         <!--Tree template-->
         <script type="text/html" id="tree-node">
-            <span data-bind="event: { mouseover: toggleShowPosition.bind($data), mouseout: toggleShowPosition.bind($data)}">
+            <span class="show-small-board" data-bind="event: { mouseover: toggleShowPosition.bind($data), mouseout: toggleShowPosition.bind($data)}">
                 <span class="colour-label" data-bind="css: {white: colour}"></span>
                 <span class="score-label" data-bind="text: score"></span>
             </span>

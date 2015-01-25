@@ -43,14 +43,14 @@
 .small-board .chess-board span {
     color:#000;
     display:block;
-    font-size:10px;
+    font-size:15px;
     position:relative;
     text-decoration:none;
 }
 .small-board .chess-board td, .chess-board tr {
     background:#fff;
-    height:15px;
-    width:15px;
+    height:20px;
+    width:20px;
     text-align:center;
     vertical-align:middle;
 }
@@ -62,12 +62,14 @@ ul {
 
 .score-label {
     background-color: orange;
-    border-radius: 12PX;
-    padding: 2px 5px;
+    border-radius: 5PX;
     font-weight: bold;
     width: 27px;
     display: inline-block;
     text-align: right;
+    display: inline-block;
+    height: 18px;
+    width: 23px;
 }
 .colour-label {
     height: 14px;
@@ -87,6 +89,6 @@ ul {
    width:500px;
 }
 
-.expand-button{
-
+.show-small-board {
+    cursor: pointer;
 }
