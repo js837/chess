@@ -13,12 +13,15 @@ var Tree = function(fen, colour, score, from, to) {
     this.moves = ko.observableArray([]);
 
 
+    this.showChildren = ko.observable(false)
 
-    this.getLoadMovesAndPosition = function(){
 
-        if (!self.moves().length) {
+    this.toggleShowChildren = function(){
+        // Going from 'hidden' to 'show' so populate moves observable
+        if (!self.showChildren() && !self.moves().length){
             self.getAvailableMoves()
         }
+        this.showChildren(!this.showChildren())
     }
 
     this.getAvailableMoves = function(){

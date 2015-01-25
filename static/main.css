@@ -17,14 +17,14 @@
 .main-board .chess-board span {
     color:#000;
     display:block;
-    font-size:6vmin;
+    font-size:40px;
     position:relative;
     text-decoration:none;
 }
 .main-board .chess-board td, .chess-board tr {
     background:#fff;
-    height:9vmin;
-    width:9vmin;
+    height: 60px;
+    width: 60px;
     text-align:center;
     vertical-align:middle;
 }
@@ -86,6 +86,7 @@ ul {
 
 #main-fen-input {
    margin-bottom: 10px;
+   margin-top: 20px;
    width:500px;
 }
 

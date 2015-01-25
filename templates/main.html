@@ -32,13 +32,15 @@
             <button class="btn btn-xs btn-info" type="button">Show game info</button>
         </p>
 
+        <div class="main-board" data-bind="template: { name: 'chess-board', data: mainBoard }"></div>
+
+
         <input id="main-fen-input" data-bind="value: mainBoard.fen"/>
-        
+
         <div class="tree-view">
             <div data-bind="template: { name: 'tree-node', data: tree }"></div>
         </div>
 
-        <div class="main-board" data-bind="template: { name: 'chess-board', data: mainBoard }"></div>
 
 
 
@@ -63,7 +65,7 @@
                 <span class="score-label" data-bind="text: score"></span>
             </span>
 
-            <a href="#" class="expand-button" data-bind="click: getLoadMovesAndPosition">[+]</a>
+            <a href="#" class="expand-button" data-bind="click: toggleShowChildren.bind($data)">[+]</a>
             <span class="fen-label" data-bind="text: fen"></span>
 
 
@@ -71,7 +73,7 @@
             <div class="small-board" data-bind="visible: showPosition, template: { name: 'chess-board', data: position }"></div>
 
 
-            <ul data-bind="foreach: moves">
+            <ul data-bind="visible: showChildren, foreach: moves">
                 <li>
                     <div data-bind="template: { name: 'tree-node', data: $data }"></div>
                 </li>

@@ -43,6 +43,8 @@ def get_moves():
                     }
         move_dicts.append(move_dict)
 
+    move_dicts.sort(key=lambda x:-abs(x['score']))
+
     return jsonify({
         'fen': fen,
         'ai': ai,
