@@ -10,13 +10,18 @@ from ai.basic import ShannonAI
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yx R~XHH!jmN]LWX/,?RT'
 
+
+@app.route("/get-moves", methods=['POST'])
+
+
+
 @app.route("/get-moves", methods=['POST'])
 def get_moves():
     fen = request.form.get('fen')
     ai = request.form.get('ai')
     position = PositionSerializer.from_fen(fen)
     if ai:
-        position = ShannonAI.get_best_move(position, depth=3)
+        position = ShannonAI.get_best_move(position, depth=2)
         new_fen = PositionSerializer.to_fen(position)
 
     moves, result = position.get_moves_and_result()

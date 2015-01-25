@@ -10,6 +10,23 @@ import time
 
 class Evaluation(unittest.TestCase):
 
+
+    def test_new_eval_method(self):
+        position = new_game()
+        t0 = time.time()
+        move_tree = MinimaxLookahead.breadth_search(position, depth=3)
+        t1 = time.time()
+        print t1-t0
+
+        #for position, depth in move_tree:
+        #    ShannonAI.evaluate(position)
+        #t2 = time.time()
+        #print t2-t1
+
+
+
+
+
     def test_eval(self):
         position = new_game()
         self.assertIsInstance(ShannonAI.evaluate(position), (float, int))
@@ -20,6 +37,8 @@ class Evaluation(unittest.TestCase):
         for i,move in enumerate(position.get_moves()):
             print i, ShannonAI.evaluate(move, colour=position.active_colour)
             print move
+
+
 
     def test_obvious_move(self):
         test_board = (' .K......\n' #8

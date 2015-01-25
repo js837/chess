@@ -1,4 +1,5 @@
 import multiprocessing as mp
+
 from serializers import PositionSerializer
 from games.masters import games
 
@@ -11,13 +12,19 @@ class MinimaxLookahead(object):
     def evaluate(cls, position, colour=None, *args, **kwargs):
         raise NotImplementedError
 
+
+
+
+
     @classmethod
     def breadth_search(cls, position, depth):
+        from ai.basic import ShannonAI
         unexplored = [(position, 0)]
         explored = []
         while unexplored:
             new_position, new_depth = unexplored.pop()
-            explored.append((new_position, new_depth))
+            evaluation = ShannonAI.evaluate(new_position)
+            explored.append((new_position, new_depth, evaluation))
             if new_depth < depth:
                 moves = new_position.get_moves()
                 for move in moves:

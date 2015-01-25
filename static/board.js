@@ -1,3 +1,21 @@
+var Tree = function(position) {
+    var self = this;
+
+    this.position = position
+
+
+    this.moves = ko.observableArray([])
+    this.getAvailableMoves = function(){
+
+
+    }
+
+
+
+}
+
+
+
 var ChessPosition = function(fen, result, moves) {
 
     global = this; //DEBUG.
@@ -44,6 +62,9 @@ var ChessPosition = function(fen, result, moves) {
             }
         }
     }
+
+
+
 
     var startingPosition = {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "result": null,
         "moves": [{"fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "from": [0, 1], "newPiece": null, "to": [2, 2]},

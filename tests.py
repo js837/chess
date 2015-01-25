@@ -5,7 +5,7 @@ from position.tests import *
 from helpers.tests import *
 from serializers.tests import *
 
-#from ai.tests import *
+from ai.tests import *
 
 
 

@@ -31,18 +31,24 @@
             <button class="btn btn-xs btn-default" data-bind="click: newGame" type="button">New game</button>
             <button class="btn btn-xs btn-info" type="button">Show game info</button>
         </p>
-        <p>
-            <table class="chess-board">
-                <tbody data-bind="foreach: board">
-                    <tr data-bind="foreach: $data">
-                        <td data-bind="css: {highlight: hightlight}, event: {click: selectSquare}" class="square">
-                            <span data-bind="html: pieceHtml"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <script src="/static/board.js"></script>
-        </p>
+        
+        <div class="tree-view">
+            <span data-bind="text: fen"></span>
+            <ul data-bind="foreach: moves">
+                <li data-bind="text:$data.fen"></li>
+            </ul>
+        </div>
+        
+        <table class="chess-board">
+            <tbody data-bind="foreach: board">
+                <tr data-bind="foreach: $data">
+                    <td data-bind="css: {highlight: hightlight}, event: {click: selectSquare}" class="square">
+                        <span data-bind="html: pieceHtml"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script src="/static/board.js"></script>
     </div>
 </body>
 </html>
