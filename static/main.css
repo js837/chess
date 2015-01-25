@@ -14,14 +14,14 @@
 .chess-board td.square.highlight {
     background-color: #ffd110 !important;
 }
-.chess-board span {
+.main-board .chess-board span {
     color:#000;
     display:block;
     font-size:6vmin;
     position:relative;
     text-decoration:none;
 }
-.chess-board td, .chess-board tr {
+.main-board .chess-board td, .chess-board tr {
     background:#fff;
     height:9vmin;
     width:9vmin;
@@ -30,4 +30,63 @@
 }
 .chess-board tr:nth-child(odd) td.square:nth-child(even), .chess-board tr:nth-child(even) td.square:nth-child(odd) {
     background:#ccc;
+}
+
+.small-board {
+    position: absolute;
+    margin-left: 71px;
+    margin-top: -11px;
+    border: 2px solid grey;
+    z-index: 100;
+}
+
+.small-board .chess-board span {
+    color:#000;
+    display:block;
+    font-size:10px;
+    position:relative;
+    text-decoration:none;
+}
+.small-board .chess-board td, .chess-board tr {
+    background:#fff;
+    height:15px;
+    width:15px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+ul {
+    list-style: none;
+    padding-left: 50px;
+}
+
+.score-label {
+    background-color: orange;
+    border-radius: 12PX;
+    padding: 2px 5px;
+    font-weight: bold;
+    width: 27px;
+    display: inline-block;
+    text-align: right;
+}
+.colour-label {
+    height: 14px;
+    width: 15px;
+    display: inline-block;
+    font-weight: bold;
+    border: 1px solid grey;
+    background-color: black;
+
+}
+.colour-label.white {
+    background-color: white;
+}
+
+#main-fen-input {
+   margin-bottom: 10px;
+   width:500px;
+}
+
+.expand-button{
+
 }

@@ -1,22 +1,95 @@
-var Tree = function(fen) {
+var Tree = function(fen, colour, score, from, to) {
     var self = this;
 
+    this.fen = ko.observable(fen);
+    this.position = new ChessPosition(fen, null, [], colour, score, from, to)
+    this.score = ko.observable(score)
+    this.colour = ko.observable(colour)
 
+    this.showPosition = ko.observable(false);
+    this.toggleShowPosition = function () { self.showPosition(!self.showPosition()) };
 
-    this.fen = fen;
-    //this.position = new ChessPosition()
 
     this.moves = ko.observableArray([]);
 
-    this.getAvailableMoves = function(){
-        $.post('/get-moves', {fen:self.fen, ai:false}).done(function(newPosition){
-            $.each(newPosition.moves, function(i, move){
-                self.moves.push(new Tree(move.fen))
-            })
 
-        })
 
+    this.getLoadMovesAndPosition = function(){
+
+        if (!self.moves().length) {
+            self.getAvailableMoves()
+        }
     }
+
+    this.getAvailableMoves = function(){
+         $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({fen:self.fen(), ai:false}),
+            dataType: 'json',
+            url: '/get-moves'
+        }).done(function(newPosition){
+            $.each(newPosition.moves, function(i, move){
+                self.moves.push(new Tree(move.fen, move.colour, move.score, move.from, move.to))
+            })
+        })
+    }
+}
+
+
+var App = function(){
+    var self = this
+    globalApp = this
+
+    var startingPosition = {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+                            "result": null,
+                            "score": 0,
+                            "colour": true,
+                            "from": null,
+                            "to": null,
+                            "moves": [{"fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "from": [0, 1], "newPiece": null, "to": [2, 2]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/N7/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "from": [0, 1], "newPiece": null, "to": [2, 0]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1", "from": [0, 6], "newPiece": null, "to": [2, 7]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1", "from": [0, 6], "newPiece": null, "to": [2, 5]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 0], "newPiece": null, "to": [2, 0]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1", "from": [1, 0], "newPiece": null, "to": [3, 0]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/1P6/P1PPPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 1], "newPiece": null, "to": [2, 1]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/1P6/8/P1PPPPPP/RNBQKBNR b KQkq b3 0 1", "from": [1, 1], "newPiece": null, "to": [3, 1]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 2], "newPiece": null, "to": [2, 2]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1", "from": [1, 2], "newPiece": null, "to": [3, 2]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/3P4/PPP1PPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 3], "newPiece": null, "to": [2, 3]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1", "from": [1, 3], "newPiece": null, "to": [3, 3]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "from": [1, 4], "newPiece": null, "to": [2, 4]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", "from": [1, 4], "newPiece": null, "to": [3, 4]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq - 0 1", "from": [1, 5], "newPiece": null, "to": [2, 5]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1", "from": [1, 5], "newPiece": null, "to": [3, 5]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR b KQkq - 0 1", "from": [1, 6], "newPiece": null, "to": [2, 6]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/6P1/8/PPPPPP1P/RNBQKBNR b KQkq g3 0 1", "from": [1, 6], "newPiece": null, "to": [3, 6]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/8/7P/PPPPPPP1/RNBQKBNR b KQkq - 0 1", "from": [1, 7], "newPiece": null, "to": [2, 7]},
+                                      {"fen": "rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq h3 0 1", "from": [1, 7], "newPiece": null, "to": [3, 7]}
+                            ]}
+
+
+    self.mainBoard = new ChessPosition(
+        startingPosition.fen,
+        startingPosition.result,
+        startingPosition.moves,
+        startingPosition.colour,
+        startingPosition.score,
+        startingPosition.from,
+        startingPosition.to
+    )
+
+    // Start a new game on load
+    this.newGame = function(){
+        self.mainBoard.fen(startingPosition.fen)
+        self.mainBoard.result(startingPosition.result)
+        self.mainBoard.moves(startingPosition.moves)
+    }
+
+    this.tree = ko.pureComputed(function(){
+        return new Tree(self.mainBoard.fen(), self.mainBoard.colour(), self.mainBoard.score(), self.mainBoard.from(), self.mainBoard.to());
+    })
 
 
 
@@ -24,9 +97,9 @@ var Tree = function(fen) {
 
 
 
-var ChessPosition = function(fen, result, moves) {
+var ChessPosition = function(fen, result, moves, colour, score, from, to) {
 
-    global = this; //DEBUG.
+
     var position = this;
 
     var chessChars = {
@@ -43,9 +116,17 @@ var ChessPosition = function(fen, result, moves) {
         this.coord = coord;
         this.pieceHtml = pieceHtml || '&nbsp;';
         this.hightlight = ko.pureComputed(function(){
-            return $.grep(position.getAvailableMoves(), function(move){
+            var selected_bool = $.grep(position.getAvailableMoves(), function(move){
                 return move.to[0] === self.coord[0] && move.to[1] === self.coord[1]
             }).length
+
+
+            if (self.to && self.from) {
+                var move_from_bool = self.from()[0] === self.coord[0] && self.from()[1] === self.coord[1]
+                var move_to_bool = self.to()[0] === self.coord[0] && self.to()[1] === self.coord[1]
+            }
+
+            return selected_bool || move_from_bool || move_to_bool
         })
 
         this.selectSquare = function(){
@@ -58,12 +139,23 @@ var ChessPosition = function(fen, result, moves) {
                 // End move
                 var move = moveGrep[0]
                 position.fen(move.fen)
-                $.post('/get-moves', {fen:move.fen,ai:true}).done(function(newPosition){
-                    // Should check newPosition.fen is same as sent?
+
+                 $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({fen:move.fen,ai:true}),
+                    dataType: 'json',
+                    url: '/get-moves'
+                }).done(function(newPosition){
                     position.fen(newPosition.new_fen)
                     position.result(newPosition.result)
                     position.moves(newPosition.moves)
+                    position.colour(newPosition.colour)
+                    position.score(newPosition.score)
+                    position.from(newPosition.from)
+                    position.to(newPosition.to)
                 })
+
             } else{
                 // Start move
                 position.startCoord(this.coord)
@@ -74,31 +166,16 @@ var ChessPosition = function(fen, result, moves) {
 
 
 
-    var startingPosition = {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "result": null,
-        "moves": [{"fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "from": [0, 1], "newPiece": null, "to": [2, 2]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/N7/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "from": [0, 1], "newPiece": null, "to": [2, 0]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1", "from": [0, 6], "newPiece": null, "to": [2, 7]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1", "from": [0, 6], "newPiece": null, "to": [2, 5]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 0], "newPiece": null, "to": [2, 0]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1", "from": [1, 0], "newPiece": null, "to": [3, 0]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/1P6/P1PPPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 1], "newPiece": null, "to": [2, 1]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/1P6/8/P1PPPPPP/RNBQKBNR b KQkq b3 0 1", "from": [1, 1], "newPiece": null, "to": [3, 1]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 2], "newPiece": null, "to": [2, 2]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1", "from": [1, 2], "newPiece": null, "to": [3, 2]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/3P4/PPP1PPPP/RNBQKBNR b KQkq - 0 1", "from": [1, 3], "newPiece": null, "to": [2, 3]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1", "from": [1, 3], "newPiece": null, "to": [3, 3]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "from": [1, 4], "newPiece": null, "to": [2, 4]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", "from": [1, 4], "newPiece": null, "to": [3, 4]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq - 0 1", "from": [1, 5], "newPiece": null, "to": [2, 5]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1", "from": [1, 5], "newPiece": null, "to": [3, 5]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR b KQkq - 0 1", "from": [1, 6], "newPiece": null, "to": [2, 6]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/6P1/8/PPPPPP1P/RNBQKBNR b KQkq g3 0 1", "from": [1, 6], "newPiece": null, "to": [3, 6]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/8/7P/PPPPPPP1/RNBQKBNR b KQkq - 0 1", "from": [1, 7], "newPiece": null, "to": [2, 7]},
-                  {"fen": "rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq h3 0 1", "from": [1, 7], "newPiece": null, "to": [3, 7]}]}
 
-    this.fen = ko.observable(fen || startingPosition.fen);
-    this.result = ko.observable(result || startingPosition.result);
-    this.moves = ko.observable(moves || startingPosition.moves)
+
+    this.fen = ko.observable(fen);
+    this.result = ko.observable(result);
+    this.moves = ko.observable(moves || [])
+    this.colour = ko.observable(colour)
+    this.score = ko.observable(score)
+    this.from = ko.observable(from)
+    this.to = ko.observable(to)
+
     this.startCoord = ko.observable([null,null])
 
     this.getAvailableMoves = function(){
@@ -106,11 +183,7 @@ var ChessPosition = function(fen, result, moves) {
             return move.from[0] === position.startCoord()[0] && move.from[1] === position.startCoord()[1]
         })
     }
-    this.newGame = function(){
-        this.fen(startingPosition.fen)
-        this.moves(startingPosition.moves)
-        this.result(startingPosition.result)
-    }
+
 
     this.board = ko.pureComputed(function(){
         // Separate the 6 components
@@ -147,7 +220,7 @@ var ChessPosition = function(fen, result, moves) {
     })
 
 
-    this.tree = new Tree(this.fen)
+
 
 }
 
@@ -156,4 +229,4 @@ var ChessPosition = function(fen, result, moves) {
 
 
 
-ko.applyBindings(new ChessPosition());
+ko.applyBindings(new App());
