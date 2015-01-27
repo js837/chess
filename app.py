@@ -22,7 +22,7 @@ def get_moves():
     new_fen = None
 
     if ai:
-        position = ShannonAI.get_best_move(position, depth=2)
+        position = ShannonAI.get_best_move(position, depth=1)
         new_fen = PositionSerializer.to_fen(position)
 
     moves, result = position.get_moves_and_result()

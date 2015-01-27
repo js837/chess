@@ -4,6 +4,7 @@ import unittest
 from helpers.general import new_game
 from algorithms import MinimaxLookahead
 from basic import ShannonAI
+from position.serializers import MoveSerializer
 from serializers import PositionSerializer
 import time
 
@@ -55,6 +56,17 @@ class Evaluation(unittest.TestCase):
         best_fen = '1K6/6Q1/8/8/8/8/8/k7 b KQkq - 0 1'
         best_move = ShannonAI.get_best_move(position, depth=1)
         self.assertEqual(PositionSerializer.to_fen(best_move), best_fen)
+
+
+    def test_obvious_move2(self):
+        position = PositionSerializer.from_fen('rnbqkbnr/3ppppp/8/2pP4/1P1QP1P1/p4P2/PP5P/RNB1KBNR b KQkq - 0 11')
+        best_move_depth1 = ShannonAI.get_best_move(position, depth=1)
+        best_move_depth2 = ShannonAI.get_best_move(position, depth=2)
+        best_move_depth3 = ShannonAI.get_best_move(position, depth=3)
+        self.assertEqual(best_move_depth1, best_move_depth2, best_move_depth3)
+
+
+
 
 
     #def test_minimax(self):
