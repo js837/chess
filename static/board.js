@@ -1,20 +1,13 @@
 var Tree = function(fen, colour, score, from, to) {
     var self = this;
-
     this.fen = ko.observable(fen);
     this.position = new ChessPosition(fen, null, [], colour, score, from, to)
     this.score = ko.observable(score)
     this.colour = ko.observable(colour)
-
     this.showPosition = ko.observable(false);
     this.toggleShowPosition = function () { self.showPosition(!self.showPosition()) };
-
-
     this.moves = ko.observableArray([]);
-
-
     this.showChildren = ko.observable(false)
-
 
     this.toggleShowChildren = function(){
         // Going from 'hidden' to 'show' so populate moves observable
@@ -43,7 +36,6 @@ var Tree = function(fen, colour, score, from, to) {
 var App = function(){
     var self = this
     globalApp = this
-
     var startingPosition = {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
                             "result": null,
                             "score": 0,
@@ -101,10 +93,7 @@ var App = function(){
 
 
 var ChessPosition = function(fen, result, moves, colour, score, from, to) {
-
-
     var position = this;
-
     var chessChars = {
         K : {W: '&#9812;', B: '&#9818;'},
         Q : {W: '&#9813;', B: '&#9819;'},
@@ -122,13 +111,10 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
             var selected_bool = $.grep(position.getAvailableMoves(), function(move){
                 return move.to[0] === self.coord[0] && move.to[1] === self.coord[1]
             }).length
-
-
             if (position.to() && position.from()) {
                 var move_from_bool = position.from()[0] === self.coord[0] && position.from()[1] === self.coord[1]
                 var move_to_bool = position.to()[0] === self.coord[0] && position.to()[1] === self.coord[1]
             }
-
             return selected_bool || move_from_bool || move_to_bool
         })
 
@@ -154,6 +140,8 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
                     position.refreshBoard(newPosition)
                 })
 
+
+
             } else{
                 // Start move
                 position.startCoord(this.coord)
@@ -161,6 +149,21 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
         }
     }
 
+
+    this.bestMoveFen = ko.observable()
+
+//    this.getBestMove = function(move){
+//         $.ajax({
+//            type: 'POST',
+//            contentType: 'application/json',
+//            data: JSON.stringify({fen:move.fen,ai:true}),
+//            dataType: 'json',
+//            url: '/get-moves'
+//        }).done(function(newPosition){
+//            position.bestMoveFen(newPosition.new_fen)
+//            position.refreshBoard(newPosition)
+//        })
+//    }
 
 
 
@@ -192,17 +195,17 @@ var ChessPosition = function(fen, result, moves, colour, score, from, to) {
         position.to(newPosition.to)
     }
 
-    this.fen.subscribe(function(newFen){
-         $.ajax({
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({fen:newFen,ai:false}),
-            dataType: 'json',
-            url: '/get-moves'
-        }).done(function(newPosition){
-            position.refreshBoard(newPosition)
-        })
-    })
+//    this.fen.subscribe(function(newFen){
+//         $.ajax({
+//            type: 'POST',
+//            contentType: 'application/json',
+//            data: JSON.stringify({fen:newFen,ai:false}),
+//            dataType: 'json',
+//            url: '/get-moves'
+//        }).done(function(newPosition){
+//            position.refreshBoard(newPosition)
+//        })
+//    })
 
 
     this.board = ko.pureComputed(function(){

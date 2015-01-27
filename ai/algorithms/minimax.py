@@ -18,19 +18,48 @@ class MinimaxLookahead(object):
 
     @classmethod
     def breadth_search(cls, position, depth):
-        from ai.basic import ShannonAI
-        unexplored = [(position, 0)]
-        explored = []
-        while unexplored:
-            new_position, new_depth = unexplored.pop()
-            evaluation = ShannonAI.evaluate(new_position)
-            explored.append((new_position, new_depth, evaluation))
-            if new_depth < depth:
-                moves = new_position.get_moves()
-                for move in moves:
-                    unexplored.append((move, new_depth+1))
 
-        return explored
+        with open('dump1.txt','rb') as old_file:
+            old_data = old_file.readlines()
+
+        old_data_dict = dict((ln.strip().split(';')[0],ln.strip().split(';')[2]) for ln in old_data)
+
+
+
+        with open('dump2.txt','a') as f:
+
+            # Temp
+            from pystockfish import Engine
+            eng = Engine(depth=15)
+
+            from ai.basic import ShannonAI
+            unexplored = [(position, 0)]
+            explored = []
+            while unexplored:
+                new_position, new_depth = unexplored.pop(0)
+
+
+
+                fen = PositionSerializer.to_fen(new_position)
+
+                if fen not in old_data_dict:
+                    eng.setfenposition(fen)
+
+                    best_move = eng.bestmove()['move']
+
+                    line = '{0};{1};{2}\n'.format(fen,str(new_depth), best_move)
+
+                    f.write(line)
+                    f.flush()
+
+                evaluation = ShannonAI.evaluate(new_position)
+                explored.append((new_position, new_depth, evaluation))
+                if new_depth < depth:
+                    moves = new_position.get_moves()
+                    for move in moves:
+                        unexplored.append((move, new_depth+1))
+
+            return explored
 
     cache = {}
 
@@ -55,12 +84,12 @@ class MinimaxLookahead(object):
 
 
 
-        # Check for move in Grandmaster moves
-        if fen in games:
-            best_move = MoveSerializer.from_str(games[fen])
-            for move in position.get_moves():
-                if move.last_move == best_move:
-                    return move
+        # # Check for move in Grandmaster moves
+        # if fen in games:
+        #     best_move = MoveSerializer.from_str(games[fen])
+        #     for move in position.get_moves():
+        #         if move.last_move == best_move:
+        #             return move
 
         return cls.alpha_beta_get_best_move(position, depth)
 

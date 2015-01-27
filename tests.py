@@ -1,5 +1,4 @@
 import unittest
-
 from pieces.tests import *
 from position.tests import *
 from helpers.tests import *

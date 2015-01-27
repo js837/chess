@@ -14,9 +14,10 @@ class Evaluation(unittest.TestCase):
     def test_new_eval_method(self):
         position = new_game()
         t0 = time.time()
-        move_tree = MinimaxLookahead.breadth_search(position, depth=3)
+        move_tree = MinimaxLookahead.breadth_search(position, depth=6)
         t1 = time.time()
         print t1-t0
+        print len(move_tree)
 
         #for position, depth in move_tree:
         #    ShannonAI.evaluate(position)
