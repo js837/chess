@@ -3,7 +3,7 @@ import multiprocessing as mp
 from serializers import PositionSerializer
 
 
-games = dict(games)
+
 
 class MinimaxLookahead(object):
     """"Basic Minimax (with Alpha/Beta) look-ahead"""
