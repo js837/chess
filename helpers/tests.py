@@ -1,5 +1,5 @@
 import unittest
-from coord import Coord
+from .coord import Coord
 
 
 class TestCoord(unittest.TestCase):

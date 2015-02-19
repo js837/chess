@@ -1,3 +1,3 @@
 __author__ = 'Jake'
 
-from pieces import *
+from .pieces import *

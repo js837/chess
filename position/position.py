@@ -129,7 +129,7 @@ class Position(object):
 
             destintation_dict[(coord_to, piece)] += (new_position,)
         
-        for coord_to, piece in destintation_dict.keys():
+        for coord_to, piece in list(destintation_dict.keys()):
             # Check for ambigious moves
             if len(destintation_dict[coord_to, piece]) == 1:
                 ambiguity = 'NONE'

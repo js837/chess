@@ -1,7 +1,7 @@
 import unittest
-from position import WHITE, BLACK, DRAW
+from .position import WHITE, BLACK, DRAW
 from helpers.general import new_game
-from serializers import PositionSerializer
+from .serializers import PositionSerializer
 
 class BasicMoves(unittest.TestCase):
 

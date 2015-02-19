@@ -1,3 +1,3 @@
 __author__ = 'Jake'
 
-from minimax import *
+from .minimax import *

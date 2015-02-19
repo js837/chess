@@ -1,7 +1,7 @@
 __author__ = 'Jake'
 
 import unittest
-from serializers import PositionSerializer
+from .serializers import PositionSerializer
 from helpers.general import new_game
 
 

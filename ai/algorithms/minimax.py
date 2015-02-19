@@ -78,19 +78,6 @@ class MinimaxLookahead(object):
 
     @classmethod
     def get_best_move(cls, position, depth=3):
-        from position.serializers import MoveSerializer
-
-        fen=PositionSerializer.to_fen(position)
-
-
-
-        # Check for move in Grandmaster moves
-        if fen in games:
-            best_move = MoveSerializer.from_str(games[fen])
-            for move in position.get_moves():
-                if move.last_move == best_move:
-                    return move
-
         return cls.alpha_beta_get_best_move(position, depth)
 
 

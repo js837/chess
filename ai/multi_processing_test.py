@@ -6,7 +6,7 @@ def atomic_worker(work_queue, done_queue):
 
     done_queue.put(x**2)
     done_queue.put(x**3)
-    print done_queue.qsize()
+    print(done_queue.qsize())
     if x<100:
         work_queue.put(x**2)
         work_queue.put(x**3)
@@ -22,7 +22,7 @@ def main():
     for x in [2,4,5,6,]:
         work_queue.put(x)
 
-    for w in xrange(2):
+    for w in range(2):
         p = Process(target=atomic_worker, args=(work_queue, done_queue))
         p.start()
         processes.append(p)

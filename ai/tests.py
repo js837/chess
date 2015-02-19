@@ -2,8 +2,8 @@ import cProfile
 import unittest
 
 from helpers.general import new_game
-from algorithms import MinimaxLookahead
-from basic import ShannonAI
+from .algorithms import MinimaxLookahead
+from .basic import ShannonAI
 from position.serializers import MoveSerializer
 from serializers import PositionSerializer
 import time
@@ -17,8 +17,8 @@ class Evaluation(unittest.TestCase):
         t0 = time.time()
         move_tree = MinimaxLookahead.breadth_search(position, depth=6)
         t1 = time.time()
-        print t1-t0
-        print len(move_tree)
+        print(t1-t0)
+        print(len(move_tree))
 
         #for position, depth in move_tree:
         #    ShannonAI.evaluate(position)
@@ -37,8 +37,8 @@ class Evaluation(unittest.TestCase):
     def test_position_metric(self):
         position = new_game()
         for i,move in enumerate(position.get_moves()):
-            print i, ShannonAI.evaluate(move, colour=position.active_colour)
-            print move
+            print(i, ShannonAI.evaluate(move, colour=position.active_colour))
+            print(move)
 
 
 
@@ -140,8 +140,8 @@ class Evaluation(unittest.TestCase):
 
         end = time.time()
 
-        print '{} moves'.format(len(move_tree))
-        print 'time: {} secs per move'.format((end-start)/len(move_tree))
+        print('{} moves'.format(len(move_tree)))
+        print('time: {} secs per move'.format((end-start)/len(move_tree)))
 
 
     #def test_timing(self):

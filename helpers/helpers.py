@@ -21,7 +21,7 @@ def new_game(board_str = None):
 
     # Permute the board so that Top left become bottom left
     board_str = board_str.replace(' ', '').replace('\n','')
-    ranks = reversed([board_str[i:i+8] for i in xrange(0, 64, 8)])
+    ranks = reversed([board_str[i:i+8] for i in range(0, 64, 8)])
     board_str = ''.join(ranks)
 
     board = ()

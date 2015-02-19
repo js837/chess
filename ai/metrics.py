@@ -1,4 +1,4 @@
-from algorithms import MinimaxLookahead
+from .algorithms import MinimaxLookahead
 from pieces import King, Queen, Bishop, Knight, Rook, Pawn
 
 class AI(object):

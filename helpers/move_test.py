@@ -8,7 +8,7 @@ python_objs = []
 for i, (fen, best_move) in enumerate(games):
 
     if i%8==0:
-        print '{0}%'.format(float(i)/len(games) * 100)
+        print('{0}%'.format(float(i)/len(games) * 100))
 
     position = PositionSerializer.from_fen(fen)
 

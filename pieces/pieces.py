@@ -1,5 +1,5 @@
 from position import *
-from pieces import *
+from .pieces import *
 from helpers.coord import *
 
 
@@ -215,7 +215,7 @@ class King(Piece):
 
         if isinstance(position[king_coord], King) and isinstance(position[rook_coord], Rook):
             # Check for pieces between Rook and Kings
-            for i in xrange(rook_coord[1]-sign, king_coord[1], -sign):
+            for i in range(rook_coord[1]-sign, king_coord[1], -sign):
                 if position[(king_coord[0],i)]:
                     return
 

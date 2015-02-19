@@ -2,7 +2,7 @@ import re
 import sys
 from collections import Counter
 
-from general import new_game
+from .general import new_game
 from position.serializers import PositionSerializer, MoveSerializer
 
 import logging
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         moves = re.split(r'\s{1,}', game)
 
         position = new_game()
-        print '{}/{}'.format(str(game_num), str(len(pgn_games)))
+        print('{}/{}'.format(str(game_num), str(len(pgn_games))))
 
         for move in moves:
             move = re.sub(r'\d+\.', '', move)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                             break
                     else:
                         logging.debug('Error at game {} in file {}'.format(str(game_num), input_file))
-                        logging.debug(str(pgn_moves.keys()))
+                        logging.debug(str(list(pgn_moves.keys())))
                         logging.debug(str(move))
                         logging.debug(str(moves))
                         logging.debug(from_fen)
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
             move_str = MoveSerializer.to_str(position.last_move)
 
-            line = u'{},{}'.format(from_fen, move_str)
+            line = '{},{}'.format(from_fen, move_str)
             lines.append(line)
 
     with open(output_file, 'wb') as output:
